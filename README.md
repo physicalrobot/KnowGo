@@ -45,3 +45,6 @@ Welcome to **KnowGo**, a revolutionary platform designed to connect students wit
 ---
 
 Stay tuned as **KnowGo** reshapes how students learn and how educators connect with their audience.
+
+
+![alt text](./assets/vikututor.png)

@@ -40,10 +40,8 @@ Welcome to **KnowGo**, a revolutionary platform designed to connect students wit
 
 ### **Coming Soon**
 
-- **Video/Audio Sessions:** Join virtual tutoring sessions directly within the app.
 - **Advanced Filters:** Search tutors by proximity, price range, or teaching style.
 - **Subscription Plans:** Unlock premium features like unlimited searches and discounted sessions.
-
 ---
 
 Stay tuned as **KnowGo** reshapes how students learn and how educators connect with their audience.

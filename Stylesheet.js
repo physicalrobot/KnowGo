@@ -117,6 +117,27 @@ const styles = StyleSheet.create({
   },
 
 
+//Sign Up and Sign In
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  picker: {
+    height: 50,
+    width: "100%",
+  },
+
+  signbutt: {
+    marginVertical: 10, // Vertical margin for space between buttons
+  },
+
+  signbutt2:{
+    marginTop: 10, // Additional top margin for the second button
+
+  }
+
 
 });
 

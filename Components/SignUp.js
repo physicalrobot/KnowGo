@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import styles from "../Stylesheet";
+import { useNavigation } from "@react-navigation/native";
 
-const SignUp = ({ onSwitchToSignIn, handleSignUp }) => {
-  const [email, setEmail] = useState("");
+const SignUp = ({ handleSignUp }) => {
+  const navigation = useNavigation();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("student");
   const [error, setError] = useState("");
 
   const handleSignUpClick = async () => {
@@ -16,15 +20,23 @@ const SignUp = ({ onSwitchToSignIn, handleSignUp }) => {
     }
 
     try {
-      await handleSignUp(email, username, password);
-      setError(""); // Clear any previous errors
+      await handleSignUp(email, username, password, role);
+
+      // Navigate based on role
+      if (role === "tutor") {
+        navigation.navigate("TutorProfileSetup", { email, username });
+      } else {
+        navigation.navigate("HomePage");
+      }
+
+      setError(""); // Clear any errors
     } catch (err) {
-      setError(err.message); // Display the error message
+      setError(err.message);
     }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
       <TextInput
         style={styles.input}
@@ -52,11 +64,26 @@ const SignUp = ({ onSwitchToSignIn, handleSignUp }) => {
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
+      <View>
+        <Text>Select Role:</Text>
+        <Picker
+          selectedValue={role}
+          onValueChange={(itemValue) => setRole(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Student" value="student" />
+          <Picker.Item label="Tutor" value="tutor" />
+        </Picker>
+      </View>
       <Button title="Sign Up" onPress={handleSignUpClick} />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+{error ? <Text style={styles.error}>{error}</Text> : null}
+<View style={styles.signbutt}>
+  <Button
+    title="Already have an account? Sign In"
+    onPress={() => navigation.navigate("SignIn")}
+  />
+</View>
 
-       {/* Add the button to go back to the Sign In page */}
-        <Button title="Already have an account? Sign In" onPress={onSwitchToSignIn} />
     </View>
   );
 };

@@ -1,8 +1,24 @@
 import React, { useState } from "react";
-import { View, TextInput, Text,Image, TouchableOpacity, ImageBackground } from "react-native";
-import styles from "../Stylesheet";
+import styles from '../Stylesheet';
+
+import {
+  View,
+  TextInput,
+  Text,
+  Image,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ImageBackground,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import KnowGoLogo from "../assets/KnowGoLogo"; // Import the SVG as a React component
+
+const { width } = Dimensions.get("window");
 
 const SignIn = ({ handleSignIn }) => {
   const navigation = useNavigation();
@@ -10,52 +26,60 @@ const SignIn = ({ handleSignIn }) => {
   const [password, setPassword] = useState("");
 
   return (
-    <View style={styles.signInContainer}>
-      {/* SVG Logo */}
-      <View style={styles.knowgosvgcontainer}>
-  <KnowGoLogo width={150} height={150} />
-</View>
-<Image 
-  source={require("../assets/knowgo.png")} // Replace with your image path
-  style={styles.logo}
-/>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+    <View style={{ flex: 1 }}>
+      {/* Main Content with Keyboard Avoidance */}
+
+          <View style={{ flex: 1 }}>
+            {/* Main Content */}
+            <View style={styles.signInContainer}>
+              {/* SVG Logo */}
+              <View style={styles.knowgosvgcontainer}>
+                <KnowGoLogo width={150} height={150} />
+              </View>
+              <Image
+                source={require("../assets/knowgo.png")} // Replace with your image path
+                style={styles.logo}
+              />
+              <Text style={styles.subHeaderText}>
+                Explore subjects and find a tutor today
+              </Text>
+
+              {/* Input Fields and Login Button */}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email address"
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={setPassword}
+                />
+                <TouchableOpacity
+                  style={styles.buttonPrimary}
+                  onPress={() => handleSignIn(email, password)}
+                >
+                  <Text style={styles.buttonTextPrimary}>LOG IN</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.forgotPassword}>FORGOT PASSWORD?</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
 
 
-
-      {/* Subheader Text */}
-      <Text style={styles.subHeaderText}>Explore subjects and find a tutor today</Text>
-
-      {/* Input Fields and Login Button */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email address"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity
-          style={styles.buttonPrimary}
-          onPress={() => handleSignIn(email, password)}
-        >
-          <Text style={styles.buttonTextPrimary}>LOG IN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword}>FORGOT PASSWORD?</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Footer with Sign Up Buttons */}
+      {/* Footer Container (Isolated from KeyboardAvoidingView) */}
       <ImageBackground
         source={require("../assets/ellipse1.png")}
         style={styles.footerContainer}
-        resizeMode="cover" // Ensures the image covers the footer area
+        resizeMode="cover"
       >
         <TouchableOpacity
           style={styles.footerButton}
@@ -71,6 +95,7 @@ const SignIn = ({ handleSignIn }) => {
         </TouchableOpacity>
       </ImageBackground>
     </View>
+  </TouchableWithoutFeedback>
   );
 };
 

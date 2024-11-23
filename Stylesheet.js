@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
 
   footerContainer: {
     position: "absolute",
-    bottom: -6,
+    bottom: 0,
     width: width,
     height: 190, // Adjust to match the desired size
     borderTopLeftRadius: width / 2,
@@ -294,6 +294,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center", // Center buttons vertically
     overflow: "hidden",
+    alignSelf: "center", // Horizontally center the logo
 
   },
   

@@ -1,14 +1,27 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  TouchableHighlight,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import availableSubjects from "../subjects";
 import styles from "../Stylesheet";
 
 const TutorProfileSetup = ({ route, navigation }) => {
   const { email, username } = route.params; // Receive data from SignUp
 
   const [location, setLocation] = useState("");
-  const [subjects, setSubjects] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [inputSubject, setInputSubject] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
+
+
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -23,12 +36,29 @@ const TutorProfileSetup = ({ route, navigation }) => {
     }
   };
 
+  const handleAddSubject = (subject) => {
+    if (!subjects.includes(subject)) {
+      setSubjects((prevSubjects) => [...prevSubjects, subject]);
+    }
+    setInputSubject(""); // Clear input field
+  };
+
   const handleProfileSetup = () => {
     // Handle submission of tutor data
-    console.log("Tutor Profile Submitted:", { email, username, location, subjects, profilePicture });
+    console.log("Tutor Profile Submitted:", {
+      email,
+      username,
+      location,
+      subjects,
+      profilePicture,
+    });
     // Navigate to homepage or another relevant page
     navigation.navigate("HomePage");
   };
+
+  const filteredSubjects = availableSubjects.filter((subject) =>
+    subject.toLowerCase().startsWith(inputSubject.toLowerCase())
+  );
 
   return (
     <View style={styles.container}>
@@ -41,10 +71,33 @@ const TutorProfileSetup = ({ route, navigation }) => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Subjects you can teach (comma-separated)"
-        value={subjects}
-        onChangeText={setSubjects}
+        placeholder="Type a subject"
+        value={inputSubject}
+        onChangeText={setInputSubject}
       />
+      {inputSubject.length > 0 && (
+        <FlatList
+          data={filteredSubjects}
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => (
+            <TouchableHighlight
+              style={styles.dropdownItem}
+              onPress={() => handleAddSubject(item)}
+              underlayColor="#ddd"
+            >
+              <Text style={styles.dropdownText}>{item}</Text>
+            </TouchableHighlight>
+          )}
+          style={styles.dropdown}
+        />
+      )}
+      <View style={styles.selectedSubjects}>
+        {subjects.map((subject, index) => (
+          <Text key={index} style={styles.subjectBadge}>
+            {subject}
+          </Text>
+        ))}
+      </View>
       <TouchableOpacity onPress={pickImage}>
         <Text style={styles.button}>Upload Profile Picture</Text>
       </TouchableOpacity>

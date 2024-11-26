@@ -8,10 +8,11 @@ import CTABox from "./CTABox";
 import FeaturedTutors from "./FeaturedTutors";
 import PopularSubjects from "./PopularSubjects";
 
-const HomePage = ({ navigation, userNameFromDB, userRole, tutors, filteredTutors, allSubjects, selectedSubject, setSelectedSubject, handleSignOut }) => {
+const HomePage = ({ navigation, userNameFromDB, userRole, filteredTutors, allSubjects, setSelectedSubject, handleSignOut }) => {
   // Render content based on the user's role
   const renderRoleBasedContent = () => {
     if (userRole === "student") {
+      console.log("this is the user:", userNameFromDB)
       return (
         <>
           <PopularSubjects
@@ -20,7 +21,7 @@ const HomePage = ({ navigation, userNameFromDB, userRole, tutors, filteredTutors
           />
           <Map tutors={filteredTutors} />
           <CTABox />
-          <FeaturedTutors tutors={tutors} />
+          <FeaturedTutors tutors={filteredTutors} />
         </>
       );
     } else if (userRole === "tutor") {

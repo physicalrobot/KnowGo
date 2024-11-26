@@ -1,55 +1,99 @@
-import React, { useState } from "react";
-import { View, TextInput, Button, Text } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import styles from "../Stylesheet";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase"; // Ensure this points to your Firebase configuration
 
-const SignUp = ({ handleSignUp }) => {
-  const navigation = useNavigation();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("student");
-  const [error, setError] = useState("");
+import { View, TextInput, ImageBackground, TouchableOpacity, Button, Text, StyleSheet } from 'react-native';
+import styles from '../Stylesheet';
+import SignUpHeader from '../assets/SignUpHeader';
+import HomePage from './HomePage';
 
-  const handleSignUpClick = async () => {
-    if (password !== confirmPassword) {
-      setError("Passwords do not match!");
+
+const SignUp = ({ route, navigation }) => {
+  const { role } = route.params; // Get the role passed from SignIn
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  
+  const handleSignUp = async () => {
+    // Basic validation
+    if (!name || !email || !password || !confirmPassword) {
+      setError("All fields are required.");
       return;
     }
-
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+  
+    // Clear errors
+    setError("");
+  
     try {
-      await handleSignUp(email, username, password, role);
-
+      // Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Add user data to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        role,
+      });
+  
+      console.log("User signed up successfully:", user);
+  
       // Navigate based on role
       if (role === "tutor") {
-        navigation.navigate("TutorProfileSetup", { email, username });
+        navigation.navigate("TutorProfileSetup", { name, email, password });
       } else {
-        navigation.navigate("HomePage");
+        navigation.navigate("HomePage", { name, email });
       }
-
-      setError(""); // Clear any errors
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      console.error("Error during sign-up:", error);
+      setError(error.message || "Failed to sign up.");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Sign Up</Text>
+    <View style={styles.inputContainer}>
+            <ImageBackground
+        source={require("../assets/sun.png")}
+        style={styles.headerImage}
+        resizeMode="cover"
+      >
+      </ImageBackground>
+      <View style={styles.signUpHeaderContainer}>
+
+      <SignUpHeader width={200} height={80} />
+      </View>
+
+      {/* text to see if roles work */}
+      {/* <Text style={styles.header}>
+        {role === 'tutor' ? 'Sign Up as a Tutor' : 'Sign Up as a Student'}
+      </Text> */}
+
+      {/* Name */}
+
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Full Name"
+        value={name}
+        onChangeText={setName}
       />
+
+      {/* Email */}
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Email Address"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
       />
+
+      {/* Password */}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -57,6 +101,8 @@ const SignUp = ({ handleSignUp }) => {
         value={password}
         onChangeText={setPassword}
       />
+
+      {/* Confirm Password */}
       <TextInput
         style={styles.input}
         placeholder="Confirm Password"
@@ -64,28 +110,27 @@ const SignUp = ({ handleSignUp }) => {
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
-      <View>
-        <Text>Select Role:</Text>
-        <Picker
-          selectedValue={role}
-          onValueChange={(itemValue) => setRole(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Student" value="student" />
-          <Picker.Item label="Tutor" value="tutor" />
-        </Picker>
-      </View>
-      <Button title="Sign Up" onPress={handleSignUpClick} />
-{error ? <Text style={styles.error}>{error}</Text> : null}
-<View style={styles.signbutt}>
-  <Button
-    title="Already have an account? Sign In"
-    onPress={() => navigation.navigate("SignIn")}
-  />
-</View>
 
+      {/* Sign Up Button */}
+      <TouchableOpacity
+  title={role === "tutor" ? "Next" : "Sign Up"}
+  onPress={handleSignUp}
+  style={styles.buttonPrimary}
+>
+  <Text style={styles.buttonTextPrimary}>
+    {role === "tutor" ? "NEXT" : "SIGN UP"}
+  </Text>
+</TouchableOpacity>
+
+
+      {/* Error Message */}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 };
 
+
+
 export default SignUp;
+
+

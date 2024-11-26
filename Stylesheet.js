@@ -31,6 +31,10 @@ const styles = StyleSheet.create({
   },
 
   // Map Component
+  mapContainer: {
+    flex:1,
+    
+  },
   map: {
     width: '100%', // Use full width of the screen to align with the navbar
     height: Dimensions.get('window').height * 0.4, // Keep height as is
@@ -318,6 +322,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+
+
+  //Sign Up
+
+  signUpHeaderContainer:{
+    left:-70,
+
+  },
+
+  headerImage:{
+    position: "absolute",
+    top: -270,
+    width: width,
+    height: 190, // Adjust to match the desired size
+  }
   
 
 });

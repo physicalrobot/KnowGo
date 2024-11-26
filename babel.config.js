@@ -9,6 +9,15 @@ module.exports = {
       { loose: true }, // Use loose mode for class properties
     ],
     [
+      "module:react-native-dotenv",
+      {
+        moduleName: "@env",
+        path: ".env",
+        safe: false,
+        allowUndefined: true,
+      },
+    ],
+    [
       "@babel/plugin-transform-private-methods",
       { loose: true }, // Use loose mode for private methods
     ],

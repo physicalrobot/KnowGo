@@ -20,10 +20,21 @@ import KnowGoLogo from "../assets/KnowGoLogo"; // Import the SVG as a React comp
 
 const { width } = Dimensions.get("window");
 
-const SignIn = ({ handleSignIn }) => {
-  const navigation = useNavigation();
+const SignIn = ({ handleSignIn, setUser, navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const onSignIn = async () => {
+    try {
+      const user = await handleSignIn(email, password);
+      setUser(user); // Update the user state in App.js
+      navigation.navigate("HomePage", { user }); // Navigate to HomePage
+    } catch (err) {
+      setError("Failed to sign in. Please check your email and password.");
+    }
+  };
+
+  
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -63,7 +74,7 @@ const SignIn = ({ handleSignIn }) => {
                 />
                 <TouchableOpacity
                   style={styles.buttonPrimary}
-                  onPress={() => handleSignIn(email, password)}
+                  onPress={onSignIn}
                 >
                   <Text style={styles.buttonTextPrimary}>LOG IN</Text>
                 </TouchableOpacity>

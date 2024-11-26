@@ -82,21 +82,37 @@ const App = () => {
     try {
       // Create a user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user; // Extract the `user` object from the credential
+      const user = userCredential.user; // Extract the `user` object
   
       // Store additional user data (name and email) in Firestore
       await setDoc(doc(db, "users", user.uid), {
-        name: name, // Use `name` to store the user's name
-        email: email, // Store the email address
+        name: name, // Store the user's name
+        email: email, // Store the user's email
       });
   
-      setUser(user); // Set the current user in state
       console.log("User signed up and data stored in Firestore:", user.uid);
+  
+      // Fetch the username immediately after saving it to Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        console.log(userDoc)
+        setUserNameFromDB(userData.name); // Set the name in state
+        console.log("Fetched username after sign-up:", userData.name);
+      } else {
+        console.log("User document not found in Firestore after sign-up.");
+      }
+  
+      // Set the user in state last to ensure the `useEffect` triggers correctly
+      setUser(user);
     } catch (err) {
       console.error("Error during sign-up:", err);
       throw err; // Propagate the error for UI to handle
     }
   };
+  
+  
+  
   
 
   const handleSignIn = async (email, password) => {
@@ -156,10 +172,6 @@ const App = () => {
   }, [user]); // Re-run whenever `user` changes
   
   
-    
-  
-  
-  
 
   useEffect(() => {
     const prepareApp = async () => {
@@ -199,6 +211,8 @@ const App = () => {
         <Stack.Screen
           name="SignUp"
           options={{ headerShown: false }}
+          handleSignUp={handleSignUp}
+
         >
           {(props) => (
             <SignUp

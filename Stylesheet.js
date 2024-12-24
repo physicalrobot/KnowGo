@@ -331,13 +331,32 @@ const styles = StyleSheet.create({
 
   },
 
+  signUpInput:{
+    width: "100%",
+    top: -20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent", // Light background color
+    marginBottom:170,
+  },
+
   headerImage:{
     position: "absolute",
     top: -270,
     width: width,
     height: 190, // Adjust to match the desired size
-  }
+  },
   
+  defaultUserImage:{
+    position: "relative", // Position the icon absolutely
+    zIndex: 10, // Ensure it's on top of other elements
+    alignSelf: "center", // Center the icon relative to the parent
+    backgroundColor: "transparent", // Optional: Add background to prevent overlap
+    borderRadius: 100, // Optional: Create a circular background
+    padding: 10, // Optional: Space around the icon
+
+
+  }
 
 });
 

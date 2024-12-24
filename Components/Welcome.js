@@ -1,14 +1,13 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import styles from '../Stylesheet';
+import { View, Text } from "react-native";
+import React from "react";
+import styles from "../Stylesheet";
 
-
-const Welcome = ({username}) => {
+const Welcome = ({ username }) => {
   return (
     <View>
       <Text style={styles.welcome}>Welcome, {username}!</Text>
     </View>
-  )
-}
+  );
+};
 
-export default Welcome
+export default Welcome;

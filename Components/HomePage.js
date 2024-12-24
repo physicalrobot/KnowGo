@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList,Text } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import styles from "../Stylesheet";
 import NavBar from "./NavBar";
 import Welcome from "./Welcome";
@@ -8,11 +8,21 @@ import CTABox from "./CTABox";
 import FeaturedTutors from "./FeaturedTutors";
 import PopularSubjects from "./PopularSubjects";
 
-const HomePage = ({ navigation, userNameFromDB, userRole, filteredTutors, allSubjects, setSelectedSubject, handleSignOut }) => {
+const HomePage = ({
+  navigation,
+  userNameFromDB,
+  userRole,
+  filteredTutors,
+  allSubjects,
+  setSelectedSubject,
+  handleSignOut,
+}) => {
+  console.log("Received userNameFromDB in HomePage:", userNameFromDB);
+
   // Render content based on the user's role
   const renderRoleBasedContent = () => {
     if (userRole === "student") {
-      console.log("this is the user:", userNameFromDB)
+      console.log("this is the user:", userNameFromDB);
       return (
         <>
           <PopularSubjects
@@ -25,6 +35,8 @@ const HomePage = ({ navigation, userNameFromDB, userRole, filteredTutors, allSub
         </>
       );
     } else if (userRole === "tutor") {
+      console.log("this is the user:", userNameFromDB);
+
       return (
         <>
           <View>
